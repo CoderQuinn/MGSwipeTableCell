@@ -50,11 +50,11 @@ You can use CocoaPods to include MGSwipeTableCell into you project:
     
 You can use Carthage to include MGSwipeTableCell into your project. Just add this dependency to your Cartfile:
     
-    github "MortimerGoro/MGSwipeTableCell"
+    github "CoderQuinn/MGSwipeTableCell"
 
 You can use Swift Package Manager to include MGSwipeTableCell into you project:
 
-    .package(url: "https://github.com/MortimerGoro/MGSwipeTableCell.git", from: "1.6.0")
+    .package(url: "https://github.com/CoderQuinn/MGSwipeTableCell.git", from: "1.6.15")
 
 ## Usage
 
