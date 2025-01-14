@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.6.15
+- Add two custom methods to satisfy business needs.
+
 ## 1.6.14
 
 - Fix Visual glitch/flash on refreshContentView() while cell is swiped open (see #363)

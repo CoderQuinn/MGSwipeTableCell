@@ -180,7 +180,7 @@
     cell.textLabel.font = [UIFont systemFontOfSize:16];
     cell.detailTextLabel.text = data.detailTitle;
     cell.accessoryType = accessory;
-    cell.delegate = self;
+    cell.swipeDelegate = self;
     cell.allowsMultipleSwipe = allowMultipleSwipe;
     
     if (background) { //transparency test
