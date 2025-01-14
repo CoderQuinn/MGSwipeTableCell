@@ -36,8 +36,8 @@
         return nil;
     }
     BOOL hide = YES;
-    if (_currentCell && _currentCell.delegate && [_currentCell.delegate respondsToSelector:@selector(swipeTableCell:shouldHideSwipeOnTap:)]) {
-        hide = [_currentCell.delegate swipeTableCell:_currentCell shouldHideSwipeOnTap:p];
+    if (_currentCell && _currentCell.swipeDelegate && [_currentCell.swipeDelegate respondsToSelector:@selector(swipeTableCell:shouldHideSwipeOnTap:)]) {
+        hide = [_currentCell.swipeDelegate swipeTableCell:_currentCell shouldHideSwipeOnTap:p];
     }
     if (hide) {
         [_currentCell hideSwipeAnimated:YES];
@@ -337,12 +337,12 @@
     }
 #pragma clang diagnostic pop
     
-    if (_cell.delegate && [_cell.delegate respondsToSelector:@selector(swipeTableCell:tappedButtonAtIndex:direction:fromExpansion:)]) {
+    if (_cell.swipeDelegate && [_cell.swipeDelegate respondsToSelector:@selector(swipeTableCell:tappedButtonAtIndex:direction:fromExpansion:)]) {
         NSInteger index = [_buttons indexOfObject:sender];
         if (!_fromLeft) {
             index = _buttons.count - index - 1; //right buttons are reversed
         }
-        autoHide|= [_cell.delegate swipeTableCell:_cell tappedButtonAtIndex:index direction:_fromLeft ? MGSwipeDirectionLeftToRight : MGSwipeDirectionRightToLeft fromExpansion:fromExpansion];
+        autoHide|= [_cell.swipeDelegate swipeTableCell:_cell tappedButtonAtIndex:index direction:_fromLeft ? MGSwipeDirectionLeftToRight : MGSwipeDirectionRightToLeft fromExpansion:fromExpansion];
     }
     
     if (fromExpansion && autoHide) {
@@ -599,7 +599,9 @@ static inline CGFloat mgEaseInOutBounce(CGFloat t, CGFloat b, CGFloat c) {
 @end
 
 #pragma mark MGSwipeTableCell Implementation
-
+@interface MGSwipeTableCell()
+@property (nonatomic, assign) BOOL stretched;
+@end
 
 @implementation MGSwipeTableCell
 {
@@ -801,11 +803,11 @@ static inline CGFloat mgEaseInOutBounce(CGFloat t, CGFloat b, CGFloat c) {
 
 -(void) fetchButtonsIfNeeded
 {
-    if (_leftButtons.count == 0 && _delegate && [_delegate respondsToSelector:@selector(swipeTableCell:swipeButtonsForDirection:swipeSettings:expansionSettings:)]) {
-        _leftButtons = [_delegate swipeTableCell:self swipeButtonsForDirection:MGSwipeDirectionLeftToRight swipeSettings:_leftSwipeSettings expansionSettings:_leftExpansion];
+    if (_leftButtons.count == 0 && _swipeDelegate && [_swipeDelegate respondsToSelector:@selector(swipeTableCell:swipeButtonsForDirection:swipeSettings:expansionSettings:)]) {
+        _leftButtons = [_swipeDelegate swipeTableCell:self swipeButtonsForDirection:MGSwipeDirectionLeftToRight swipeSettings:_leftSwipeSettings expansionSettings:_leftExpansion];
     }
-    if (_rightButtons.count == 0 && _delegate && [_delegate respondsToSelector:@selector(swipeTableCell:swipeButtonsForDirection:swipeSettings:expansionSettings:)]) {
-        _rightButtons = [_delegate swipeTableCell:self swipeButtonsForDirection:MGSwipeDirectionRightToLeft swipeSettings:_rightSwipeSettings expansionSettings:_rightExpansion];
+    if (_rightButtons.count == 0 && _swipeDelegate && [_swipeDelegate respondsToSelector:@selector(swipeTableCell:swipeButtonsForDirection:swipeSettings:expansionSettings:)]) {
+        _rightButtons = [_swipeDelegate swipeTableCell:self swipeButtonsForDirection:MGSwipeDirectionRightToLeft swipeSettings:_rightSwipeSettings expansionSettings:_rightExpansion];
     }
 }
 
@@ -872,8 +874,8 @@ static inline CGFloat mgEaseInOutBounce(CGFloat t, CGFloat b, CGFloat c) {
         self.selected = NO;
     if (_swipeContentView)
         [_swipeContentView removeFromSuperview];
-    if (_delegate && [_delegate respondsToSelector:@selector(swipeTableCellWillBeginSwiping:)]) {
-        [_delegate swipeTableCellWillBeginSwiping:self];
+    if (_swipeDelegate && [_swipeDelegate respondsToSelector:@selector(swipeTableCellWillBeginSwiping:)]) {
+        [_swipeDelegate swipeTableCellWillBeginSwiping:self];
     }
     
     // snapshot cell without separator
@@ -933,8 +935,8 @@ static inline CGFloat mgEaseInOutBounce(CGFloat t, CGFloat b, CGFloat c) {
     }
     [self setAccesoryViewsHidden:NO];
     
-    if (_delegate && [_delegate respondsToSelector:@selector(swipeTableCellWillEndSwiping:)]) {
-        [_delegate swipeTableCellWillEndSwiping:self];
+    if (_swipeDelegate && [_swipeDelegate respondsToSelector:@selector(swipeTableCellWillEndSwiping:)]) {
+        [_swipeDelegate swipeTableCellWillEndSwiping:self];
     }
     
     if (_tapRecognizer) {
@@ -988,7 +990,7 @@ static inline CGFloat mgEaseInOutBounce(CGFloat t, CGFloat b, CGFloat c) {
         _triggerStateChanges = YES;
         [self updateState:MGSwipeStateNone];
     }
-    BOOL cleanButtons = _delegate && [_delegate respondsToSelector:@selector(swipeTableCell:swipeButtonsForDirection:swipeSettings:expansionSettings:)];
+    BOOL cleanButtons = _swipeDelegate && [_swipeDelegate respondsToSelector:@selector(swipeTableCell:swipeButtonsForDirection:swipeSettings:expansionSettings:)];
     [self initViews:cleanButtons];
 }
 
@@ -1108,8 +1110,8 @@ static inline CGFloat mgEaseInOutBounce(CGFloat t, CGFloat b, CGFloat c) {
         return;
     }
     _swipeState = newState;
-    if (_delegate && [_delegate respondsToSelector:@selector(swipeTableCell:didChangeSwipeState:gestureIsActive:)]) {
-        [_delegate swipeTableCell:self didChangeSwipeState:_swipeState gestureIsActive: self.isSwipeGestureActive] ;
+    if (_swipeDelegate && [_swipeDelegate respondsToSelector:@selector(swipeTableCell:didChangeSwipeState:gestureIsActive:)]) {
+        [_swipeDelegate swipeTableCell:self didChangeSwipeState:_swipeState gestureIsActive: self.isSwipeGestureActive] ;
     }
 }
 
@@ -1328,8 +1330,8 @@ static inline CGFloat mgEaseInOutBounce(CGFloat t, CGFloat b, CGFloat c) {
 -(void) tapHandler: (UITapGestureRecognizer *) recognizer
 {
     BOOL hide = YES;
-    if (_delegate && [_delegate respondsToSelector:@selector(swipeTableCell:shouldHideSwipeOnTap:)]) {
-        hide = [_delegate swipeTableCell:self shouldHideSwipeOnTap:[recognizer locationInView:self]];
+    if (_swipeDelegate && [_swipeDelegate respondsToSelector:@selector(swipeTableCell:shouldHideSwipeOnTap:)]) {
+        hide = [_swipeDelegate swipeTableCell:self shouldHideSwipeOnTap:[recognizer locationInView:self]];
     }
     if (hide) {
         [self hideSwipeAnimated:YES];
@@ -1378,6 +1380,9 @@ static inline CGFloat mgEaseInOutBounce(CGFloat t, CGFloat b, CGFloat c) {
         }
     }
     else if (gesture.state == UIGestureRecognizerStateChanged) {
+        if (self.swipeDelegate && [self.swipeDelegate respondsToSelector:@selector(swipeTableCell:isSwipingWithPoint:)]) {
+            [self.swipeDelegate swipeTableCell:self isSwipingWithPoint:current];
+        }
         CGFloat offset = _panStartOffset + current.x - _panStartPoint.x;
         if (_firstSwipeState == MGSwipeStateNone) {
             _firstSwipeState = offset > 0 ? MGSwipeStateSwipingLeftToRight : MGSwipeStateSwipingRightToLeft;
@@ -1420,7 +1425,11 @@ static inline CGFloat mgEaseInOutBounce(CGFloat t, CGFloat b, CGFloat c) {
             _targetOffset = [self filterSwipe:_targetOffset];
             MGSwipeSettings * settings = _swipeOffset > 0 ? _leftSwipeSettings : _rightSwipeSettings;
             MGSwipeAnimation * animation = nil;
+            
+            BOOL isShow = YES;
             if (_targetOffset == 0) {
+                isShow = NO;
+                self.stretched = NO;
                 animation = settings.hideAnimation;
             }
             else if (fabs(_swipeOffset) > fabs(_targetOffset)) {
@@ -1429,7 +1438,20 @@ static inline CGFloat mgEaseInOutBounce(CGFloat t, CGFloat b, CGFloat c) {
             else {
                 animation = settings.showAnimation;
             }
-            [self setSwipeOffset:_targetOffset animation:animation completion:nil];
+            __weak typeof(self) weakSelf = self;
+            [self setSwipeOffset:_targetOffset animation:animation completion:^(BOOL finished) {
+                __strong typeof(weakSelf) strongSelf = weakSelf;
+                if (!strongSelf || !isShow) {
+                    return;
+                }
+                if (strongSelf.stretched) {
+                    return;
+                }
+                strongSelf.stretched = YES;
+                if (strongSelf.swipeDelegate && [strongSelf.swipeDelegate respondsToSelector:@selector(swipeTableCellDidShowActionsView:)]) {
+                    [strongSelf.swipeDelegate swipeTableCellDidShowActionsView:strongSelf];
+                }
+            }];
         }
         
         _firstSwipeState = MGSwipeStateNone;
@@ -1460,16 +1482,16 @@ static inline CGFloat mgEaseInOutBounce(CGFloat t, CGFloat b, CGFloat c) {
         }
         
         //make a decision according to existing buttons or using the optional delegate
-        if (_delegate && [_delegate respondsToSelector:@selector(swipeTableCell:canSwipe:fromPoint:)]) {
+        if (_swipeDelegate && [_swipeDelegate respondsToSelector:@selector(swipeTableCell:canSwipe:fromPoint:)]) {
             CGPoint point = [_panRecognizer locationInView:self];
-            _allowSwipeLeftToRight = [_delegate swipeTableCell:self canSwipe:MGSwipeDirectionLeftToRight fromPoint:point];
-            _allowSwipeRightToLeft = [_delegate swipeTableCell:self canSwipe:MGSwipeDirectionRightToLeft fromPoint:point];
+            _allowSwipeLeftToRight = [_swipeDelegate swipeTableCell:self canSwipe:MGSwipeDirectionLeftToRight fromPoint:point];
+            _allowSwipeRightToLeft = [_swipeDelegate swipeTableCell:self canSwipe:MGSwipeDirectionRightToLeft fromPoint:point];
         }
-        else if (_delegate && [_delegate respondsToSelector:@selector(swipeTableCell:canSwipe:)]) {
+        else if (_swipeDelegate && [_swipeDelegate respondsToSelector:@selector(swipeTableCell:canSwipe:)]) {
             #pragma clang diagnostic push
             #pragma clang diagnostic ignored "-Wdeprecated-declarations"
-            _allowSwipeLeftToRight = [_delegate swipeTableCell:self canSwipe:MGSwipeDirectionLeftToRight];
-            _allowSwipeRightToLeft = [_delegate swipeTableCell:self canSwipe:MGSwipeDirectionRightToLeft];
+            _allowSwipeLeftToRight = [_swipeDelegate swipeTableCell:self canSwipe:MGSwipeDirectionLeftToRight];
+            _allowSwipeRightToLeft = [_swipeDelegate swipeTableCell:self canSwipe:MGSwipeDirectionRightToLeft];
             #pragma clang diagnostic pop
         }
         else {

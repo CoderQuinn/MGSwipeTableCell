@@ -207,6 +207,16 @@ typedef NS_ENUM(NSInteger, MGSwipeEasingFunction) {
  **/
 -(void) swipeTableCellWillEndSwiping:(nonnull MGSwipeTableCell *) cell;
 
+/**
+ * Called when the cell is swiped, and it returns a point based on the cell frame
+ **/
+- (void) swipeTableCell:(nonnull MGSwipeTableCell *) cell isSwipingWithPoint:(CGPoint)point;
+
+/**
+ * Called when the cell ends swiping and has been expanded.
+ **/
+-(void) swipeTableCellDidShowActionsView:(nonnull MGSwipeTableCell *) cell;
+
 @end
 
 
@@ -218,7 +228,7 @@ typedef NS_ENUM(NSInteger, MGSwipeEasingFunction) {
 @interface MGSwipeTableCell : UITableViewCell
 
 /** optional delegate (not retained) */
-@property (nonatomic, weak, nullable) id<MGSwipeTableCellDelegate> delegate;
+@property (nonatomic, weak, nullable) id<MGSwipeTableCellDelegate> swipeDelegate;
 
 /** optional to use contentView alternative. Use this property instead of contentView to support animated views while swiping */
 @property (nonatomic, strong, readonly, nonnull) UIView * swipeContentView;
