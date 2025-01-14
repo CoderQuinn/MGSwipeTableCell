@@ -599,10 +599,6 @@ static inline CGFloat mgEaseInOutBounce(CGFloat t, CGFloat b, CGFloat c) {
 @end
 
 #pragma mark MGSwipeTableCell Implementation
-@interface MGSwipeTableCell()
-@property (nonatomic, assign) BOOL stretched;
-@end
-
 @implementation MGSwipeTableCell
 {
     UITapGestureRecognizer * _tapRecognizer;
@@ -1426,10 +1422,7 @@ static inline CGFloat mgEaseInOutBounce(CGFloat t, CGFloat b, CGFloat c) {
             MGSwipeSettings * settings = _swipeOffset > 0 ? _leftSwipeSettings : _rightSwipeSettings;
             MGSwipeAnimation * animation = nil;
             
-            BOOL isShow = YES;
             if (_targetOffset == 0) {
-                isShow = NO;
-                self.stretched = NO;
                 animation = settings.hideAnimation;
             }
             else if (fabs(_swipeOffset) > fabs(_targetOffset)) {
@@ -1438,20 +1431,7 @@ static inline CGFloat mgEaseInOutBounce(CGFloat t, CGFloat b, CGFloat c) {
             else {
                 animation = settings.showAnimation;
             }
-            __weak typeof(self) weakSelf = self;
-            [self setSwipeOffset:_targetOffset animation:animation completion:^(BOOL finished) {
-                __strong typeof(weakSelf) strongSelf = weakSelf;
-                if (!strongSelf || !isShow) {
-                    return;
-                }
-                if (strongSelf.stretched) {
-                    return;
-                }
-                strongSelf.stretched = YES;
-                if (strongSelf.swipeDelegate && [strongSelf.swipeDelegate respondsToSelector:@selector(swipeTableCellDidShowActionsView:)]) {
-                    [strongSelf.swipeDelegate swipeTableCellDidShowActionsView:strongSelf];
-                }
-            }];
+            [self setSwipeOffset:_targetOffset animation:animation completion:nil];
         }
         
         _firstSwipeState = MGSwipeStateNone;

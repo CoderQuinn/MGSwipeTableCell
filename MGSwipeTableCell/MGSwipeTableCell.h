@@ -212,11 +212,6 @@ typedef NS_ENUM(NSInteger, MGSwipeEasingFunction) {
  **/
 - (void) swipeTableCell:(nonnull MGSwipeTableCell *) cell isSwipingWithPoint:(CGPoint)point;
 
-/**
- * Called when the cell ends swiping and has been expanded.
- **/
--(void) swipeTableCellDidShowActionsView:(nonnull MGSwipeTableCell *) cell;
-
 @end
 
 
