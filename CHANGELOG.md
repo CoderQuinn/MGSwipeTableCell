@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.6.16
+- Remove a useless custom method
+
 ## 1.6.15
 - Add two custom methods to satisfy business needs.
 
