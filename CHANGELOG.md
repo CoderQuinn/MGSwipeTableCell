@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.6.18
+- set BackgroundColor as clear. 
+
 ## 1.6.17
 - A custom end swiping method
 
