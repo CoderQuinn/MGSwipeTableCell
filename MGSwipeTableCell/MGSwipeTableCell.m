@@ -1386,6 +1386,10 @@ static inline CGFloat mgEaseInOutBounce(CGFloat t, CGFloat b, CGFloat c) {
         self.swipeOffset = [self filterSwipe:offset];
     }
     else {
+        if (self.swipeDelegate && [self.swipeDelegate respondsToSelector:@selector(swipeTableCell:endSwipingWithPoint:)]) {
+            [self.swipeDelegate swipeTableCell:self endSwipingWithPoint:current];
+        }
+        
         __weak MGSwipeButtonsView * expansion = _activeExpansion;
         if (expansion) {
             __weak UIView * expandedButton = [expansion getExpandedButton];

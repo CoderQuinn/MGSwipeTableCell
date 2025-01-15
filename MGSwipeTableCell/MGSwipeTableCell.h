@@ -208,9 +208,14 @@ typedef NS_ENUM(NSInteger, MGSwipeEasingFunction) {
 -(void) swipeTableCellWillEndSwiping:(nonnull MGSwipeTableCell *) cell;
 
 /**
- * Called when the cell is swiped, and it returns a point based on the cell frame
+ * Called when the cell is swiping, it returns a point based on the cell frame
  **/
 - (void) swipeTableCell:(nonnull MGSwipeTableCell *) cell isSwipingWithPoint:(CGPoint)point;
+
+/**
+ * Called when the cell has end swiping, it returns a point based on the cell frame
+ **/
+- (void) swipeTableCell:(nonnull MGSwipeTableCell *) cell endSwipingWithPoint:(CGPoint)point;
 
 @end
 
