@@ -876,7 +876,7 @@ static inline CGFloat mgEaseInOutBounce(CGFloat t, CGFloat b, CGFloat c) {
     }
     
     // snapshot cell without separator
-    CGSize  cropSize        = CGSizeMake(self.bounds.size.width - 10, self.contentView.bounds.size.height);
+    CGSize  cropSize        = CGSizeMake(self.bounds.size.width, self.contentView.bounds.size.height);
     _swipeView.image = [self imageFromView:self cropSize:cropSize];
     
     _swipeOverlay.hidden = NO;
