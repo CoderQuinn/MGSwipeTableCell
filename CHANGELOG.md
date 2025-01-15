@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.6.17
+- A custom end swiping method
+
 ## 1.6.16
 - Remove a useless custom method
 
