@@ -819,6 +819,7 @@ static inline CGFloat mgEaseInOutBounce(CGFloat t, CGFloat b, CGFloat c) {
         _swipeView = [[UIImageView alloc] initWithFrame:_swipeOverlay.bounds];
         _swipeView.autoresizingMask =  UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         _swipeView.contentMode = UIViewContentModeCenter;
+        _swipeView.backgroundColor = [UIColor clearColor];
         _swipeView.clipsToBounds = YES;
         [_swipeOverlay addSubview:_swipeView];
         [self.contentView addSubview:_swipeOverlay];
