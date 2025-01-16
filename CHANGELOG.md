@@ -1,16 +1,7 @@
 # Changelog
 
-## 1.6.19
-- no need to snaps
-
-## 1.6.18
-- set BackgroundColor as clear. 
-
-## 1.6.17
-- A custom end swiping method
-
 ## 1.6.16
-- Remove a useless custom method
+- no need to snaps
 
 ## 1.6.15
 - Add two custom methods to satisfy business needs.

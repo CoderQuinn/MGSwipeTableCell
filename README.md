@@ -54,7 +54,7 @@ You can use Carthage to include MGSwipeTableCell into your project. Just add thi
 
 You can use Swift Package Manager to include MGSwipeTableCell into you project:
 
-    .package(url: "https://github.com/CoderQuinn/MGSwipeTableCell.git", from: "1.6.18")
+    .package(url: "https://github.com/CoderQuinn/MGSwipeTableCell.git", from: "1.6.16")
 
 ## Usage
 
