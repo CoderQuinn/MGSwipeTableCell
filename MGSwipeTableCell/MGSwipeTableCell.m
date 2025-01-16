@@ -491,7 +491,7 @@
     if (self = [super init]) {
         self.buttonIndex = -1;
         self.threshold = 1.3;
-        self.animationDuration = 0.2;
+        self.animationDuration = 0.3;
         self.triggerAnimation = [[MGSwipeAnimation alloc] init];
     }
     return self;
@@ -875,13 +875,16 @@ static inline CGFloat mgEaseInOutBounce(CGFloat t, CGFloat b, CGFloat c) {
         [_swipeDelegate swipeTableCellWillBeginSwiping:self];
     }
     
-    // snapshot cell without separator
-    CGSize  cropSize        = CGSizeMake(self.bounds.size.width, self.contentView.bounds.size.height);
-    _swipeView.image = [self imageFromView:self cropSize:cropSize];
-    
     _swipeOverlay.hidden = NO;
-    if (_swipeContentView)
+    if (_swipeContentView) {
+        _swipeView.image = nil;
         [_swipeView addSubview:_swipeContentView];
+    } else {
+        // snapshot cell without separator
+        CGSize  cropSize        = CGSizeMake(self.bounds.size.width, self.contentView.bounds.size.height);
+        _swipeView.image = [self imageFromView:self cropSize:cropSize];
+    }
+        
     
     if (!_allowsMultipleSwipe) {
         //input overlay on the whole table

@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.6.19
+- no need to snaps
+
 ## 1.6.18
 - set BackgroundColor as clear. 
 
